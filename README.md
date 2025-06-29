@@ -1,13 +1,15 @@
 # windows-env-testcontainers-test
 
 - For https://github.com/apache/shardingsphere/issues/35052 .
-- Execute the following command on the Windows 11 Home 24H2 instance with `PowerShell/PowerShell`,
+- Execute the following command on the `Windows 11 Home 24H2` instance with `PowerShell/PowerShell`,
   `version-fox/vfox`, `git-for-windows/git` and `docker/cli` installed. 
   **Note that these commands are usually used in Github Actions' `windows-latest` runner or in a virtual machine that supports nested virtualization.**
 
 ```shell
 # Enter PowerShell 7 in Windows 11
+wsl --install
 wsl --install Ubuntu-24.04
+wsl --set-default Ubuntu-24.04
 
 # Enter bash in the Ubuntu-24.04 Linux distribution
 sudo apt-get update
@@ -37,5 +39,4 @@ cd ./windows-env-testcontainers-test
 - The log is as follows.
 
 ```shell
-
 ```
