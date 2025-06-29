@@ -38,7 +38,9 @@ jobs:
       - name: Test Docker CLI on Windows Server without GUI
         env:
           DOCKER_HOST: tcp://127.0.0.1:12375
-        run: docker run hello-world:linux
+        run: |
+          docker version
+          docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
