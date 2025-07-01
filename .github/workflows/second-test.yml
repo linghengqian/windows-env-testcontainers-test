@@ -62,5 +62,4 @@ jobs:
           DOCKER_HOST: 'tcp://localhost:12376'
           DOCKER_TLS_VERIFY: '1'
           DOCKER_CERT_PATH: '\\wsl$\Ubuntu-24.04\root\.docker'
-          TESTCONTAINERS_RYUK_DISABLED: true
         run: ./mvnw clean test
