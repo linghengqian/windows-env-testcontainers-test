@@ -22,7 +22,7 @@ jobs:
           use-cache: 'true'
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
-          winget install --id SUSE.RancherDesktop --exact --silent --accept-source-agreements --accept-package-agreements
+          choco install rancher-desktop
           rdctl set --container-engine docker --kubernetes-enabled=false 
           docker run hello-world:linux
       - uses: actions/setup-java@v4
