@@ -32,16 +32,19 @@ jobs:
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update
           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-          cat /usr/lib/systemd/system/docker.service
-          sudo sed -i 's|-H fd://|-H fd:// -H tcp://127.0.0.1:12375|' /usr/lib/systemd/system/docker.service
+          sudo mkdir -p /etc/systemd/system/docker.service.d
+          sudo cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
+          [Service]
+          ExecStart=
+          ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock \
+            -H=tcp://127.0.0.1:12375
+          EOF
           sudo systemctl daemon-reload
           sudo systemctl restart docker.service
       - name: Test Docker CLI on Windows Server without GUI
         env:
           DOCKER_HOST: tcp://127.0.0.1:12375
-        run: |
-          docker version
-          docker run hello-world:linux
+        run: docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
