@@ -32,18 +32,25 @@ jobs:
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update
           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+          curl -fsSL https://raw.githubusercontent.com/lbruun-net/docker-free/main/docker-create-certs.sh | bash
           sudo mkdir -p /etc/systemd/system/docker.service.d
           sudo cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
           [Service]
           ExecStart=
           ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock \
-            -H=tcp://127.0.0.1:12375
+            -H=tcp://0.0.0.0:12376 \
+            --tlsverify=true \
+            --tlscacert=/etc/docker/certs/ca.pem \
+            --tlscert=/etc/docker/certs/cert.pem \
+            --tlskey=/etc/docker/certs/key.pem
           EOF
           sudo systemctl daemon-reload
           sudo systemctl restart docker.service
       - name: Test Docker CLI on Windows Server without GUI
         env:
-          DOCKER_HOST: tcp://127.0.0.1:12375
+          DOCKER_HOST: 'tcp://localhost:12376'
+          DOCKER_TLS_VERIFY: '1'
+          DOCKER_CERT_PATH: '\\wsl$\Ubuntu-24.04\root\.docker'
         run: docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
@@ -52,5 +59,7 @@ jobs:
           cache: 'maven'
       - name: Run test with JDK
         env:
-          DOCKER_HOST: tcp://127.0.0.1:12375
+          DOCKER_HOST: 'tcp://localhost:12376'
+          DOCKER_TLS_VERIFY: '1'
+          DOCKER_CERT_PATH: '\\wsl$\Ubuntu-24.04\root\.docker'
         run: ./mvnw clean test
