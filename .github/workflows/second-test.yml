@@ -62,4 +62,5 @@ jobs:
           DOCKER_HOST: 'tcp://localhost:12376'
           DOCKER_TLS_VERIFY: '1'
           DOCKER_CERT_PATH: '\\wsl$\Ubuntu-24.04\root\.docker'
+          TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: '/var/run/docker.sock'
         run: ./mvnw clean test
