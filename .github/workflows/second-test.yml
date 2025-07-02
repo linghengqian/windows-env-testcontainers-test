@@ -23,6 +23,7 @@ jobs:
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           choco install rancher-desktop
+          Import-Module "$env:ChocolateyInstall/helpers/chocolateyInstaller.psm1"
           refreshenv
           rdctl set --container-engine.name=moby --kubernetes.enabled=false
           rdctl start --application.start-in-background
