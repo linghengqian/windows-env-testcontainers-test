@@ -27,7 +27,6 @@ jobs:
         run: |
           docker context ls
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background
-          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" set --container-engine.name="moby"
           docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
