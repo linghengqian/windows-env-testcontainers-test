@@ -22,7 +22,7 @@ jobs:
           use-cache: 'true'
       - name: Install Rancher Desktop on Windows Server without GUI
         run: |
-          winget install --id SUSE.RancherDesktop --source winget
+          winget install --id SUSE.RancherDesktop --source winget --accept-package-agreements --accept-source-agreements
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           docker context ls
