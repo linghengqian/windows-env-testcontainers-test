@@ -23,8 +23,8 @@ jobs:
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           choco install rancher-desktop
-          C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe set --container-engine docker --kubernetes-enabled=false
-          C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe start --application.start-in-background
+          "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" set --container-engine docker --kubernetes-enabled=false
+          "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background
           docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
