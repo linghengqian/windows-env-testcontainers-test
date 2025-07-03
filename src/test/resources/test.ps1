@@ -1,16 +1,9 @@
-$dockerDataPath = "$( $env:ProgramData )\docker"
-if (-not (Test-Path $dockerDataPath))
-{
-    exit 0
-}
+if (-not (Test-Path "$( $env:ProgramData )\docker")) { exit 0 }
 $services = @("cexecsvc", "vmcompute", "vmicguestinterface", "vmicheartbeat", "vmickvpexchange", "vmicrdv", "vmicshutdown", "vmictimesync", "vmicvmsession", "vmicvss")
 foreach ($serviceName in $services)
 {
     $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
-    if ($service -and $service.Status -eq 'Running')
-    {
-        Stop-Service -Name $serviceName -Force -ErrorAction SilentlyContinue
-    }
+    if ($service -and $service.Status -eq 'Running') { Stop-Service -Name $serviceName -Force -ErrorAction SilentlyContinue }
 }
 Start-Sleep -Seconds 2
 $hcsdiagOutput = & hcsdiag.exe list 2> $null
@@ -44,7 +37,7 @@ if (Get-Command Get-ComputeProcess -ErrorAction SilentlyContinue)
     }
 }
 Start-Sleep -Seconds 3
-$windowsFilterPath = Join-Path $dockerDataPath "windowsfilter"
+$windowsFilterPath = Join-Path "$( $env:ProgramData )\docker" "windowsfilter"
 if (Test-Path $windowsFilterPath)
 {
     $layerDirs = Get-ChildItem -Path $windowsFilterPath -Directory -ErrorAction SilentlyContinue
@@ -110,13 +103,10 @@ public static extern int HcsDestroyLayer(string layerPath);
                 & robocopy.exe $tempEmptyDir $windowsFilterPath /MIR /R:1 /W:1 /NP /NFL /NDL /NJH /NJS 2> $null | Out-Null
                 Remove-Item $tempEmptyDir -Force -ErrorAction SilentlyContinue
             }
-            catch
-            {
-                Remove-Item $tempEmptyDir -Force -ErrorAction SilentlyContinue
-            }
+            catch { Remove-Item $tempEmptyDir -Force -ErrorAction SilentlyContinue }
         }
     }
 }
-Remove-Item $dockerDataPath -Recurse -Force
+Remove-Item "$( $env:ProgramData )\docker" -Recurse -Force
 $dockerDownloads = "$env:UserProfile\DockerDownloads"
 if (Test-Path $dockerDownloads) { Remove-Item $dockerDownloads -Recurse -Force }
