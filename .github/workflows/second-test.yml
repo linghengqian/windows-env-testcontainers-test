@@ -159,7 +159,9 @@ jobs:
           if (Test-Path $dockerDownloads) { Remove-Item $dockerDownloads -Recurse -Force }
       - name: Install Rancher Desktop on Windows Server without GUI
         run: |
-          winget install --id SUSE.RancherDesktop --source winget --override "/qn /norestart"
+          $logPath = "$env:TEMP\MsiInstall.log"
+          winget install --id SUSE.RancherDesktop --source winget --override "/qn /norestart /l*v $logPath"
+           if (Test-Path $logPath) { cat $logPath }
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
