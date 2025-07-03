@@ -15,11 +15,6 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - name: Setup WSL 2 and Ubuntu Linux distribution
-        uses: Vampire/setup-wsl@v5
-        with:
-          distribution: 'Ubuntu-24.04'
-          use-cache: 'true'
       - name: Uninstall Docker Engine for WCOW on Windows Server
         run: |
           $myWindowsID = [System.Security.Principal.WindowsIdentity]::GetCurrent()
