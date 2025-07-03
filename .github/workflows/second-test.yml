@@ -20,39 +20,39 @@ jobs:
         with:
           distribution: 'Ubuntu-24.04'
           use-cache: 'true'
-      # TODO need `Remove-DockerContainers`, `Remove-DockerImages`, `Remove-DockerVolumes`, `Remove-DockerNetworks`, `Remove-DockerData`
-      - name: Uninstall Docker Daemon on Windows Server
-        run: |
-          $service = Get-Service -Name docker -ErrorAction SilentlyContinue
-          $testDocker = $service -ne $null
-          if (-not $testDocker)
-          {
-              exit 0
-          }
-          Stop-Service -Name docker -Force -ErrorAction Stop
-          & sc.exe delete docker 2>&1
-          $registryPaths = @(
-              "HKLM:\SYSTEM\CurrentControlSet\Services\docker",
-              "HKLM:\SYSTEM\ControlSet002\Services\docker",
-              "HKLM:\SYSTEM\CurrentControlSet\Services\EventLog\Application\docker"
-          )
-          foreach ($regPath in $registryPaths)
-          {
-              if (Test-Path $regPath)
-              {
-                  Remove-Item $regPath -Recurse -Force
-              }
-          }
-          $dockerExe = Join-Path $env:windir "System32\docker.exe"
-          if (Test-Path $dockerExe)
-          {
-              Remove-Item $dockerExe -Force
-          }
-          $dockerdExe = Join-Path $env:windir "System32\dockerd.exe"
-          if (Test-Path $dockerdExe)
-          {
-              Remove-Item $dockerdExe -Force
-          }
+#      # TODO need `Remove-DockerContainers`, `Remove-DockerImages`, `Remove-DockerVolumes`, `Remove-DockerNetworks`, `Remove-DockerData`
+#      - name: Uninstall Docker Daemon on Windows Server
+#        run: |
+#          $service = Get-Service -Name docker -ErrorAction SilentlyContinue
+#          $testDocker = $service -ne $null
+#          if (-not $testDocker)
+#          {
+#              exit 0
+#          }
+#          Stop-Service -Name docker -Force -ErrorAction Stop
+#          & sc.exe delete docker 2>&1
+#          $registryPaths = @(
+#              "HKLM:\SYSTEM\CurrentControlSet\Services\docker",
+#              "HKLM:\SYSTEM\ControlSet002\Services\docker",
+#              "HKLM:\SYSTEM\CurrentControlSet\Services\EventLog\Application\docker"
+#          )
+#          foreach ($regPath in $registryPaths)
+#          {
+#              if (Test-Path $regPath)
+#              {
+#                  Remove-Item $regPath -Recurse -Force
+#              }
+#          }
+#          $dockerExe = Join-Path $env:windir "System32\docker.exe"
+#          if (Test-Path $dockerExe)
+#          {
+#              Remove-Item $dockerExe -Force
+#          }
+#          $dockerdExe = Join-Path $env:windir "System32\dockerd.exe"
+#          if (Test-Path $dockerdExe)
+#          {
+#              Remove-Item $dockerdExe -Force
+#          }
       - name: Install Rancher Desktop on Windows Server without GUI
         run: |
           choco install rancher-desktop
