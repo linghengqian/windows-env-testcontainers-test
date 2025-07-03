@@ -159,7 +159,9 @@ jobs:
           if (Test-Path $dockerDownloads) { Remove-Item $dockerDownloads -Recurse -Force }
       - name: Install Rancher Desktop on Windows Server without GUI
         run: |
-          choco install rancher-desktop
+          $downloadPath = Join-Path $env:TEMP "rancher-desktop.msi"
+          Invoke-WebRequest -Uri https://github.com/rancher-sandbox/rancher-desktop/releases/download/v1.19.3/Rancher.Desktop.Setup.1.19.3.msi -OutFile $downloadPath
+          & msiexec.exe /i "$downloadPath" /qn /norestart
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
