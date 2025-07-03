@@ -165,8 +165,13 @@ jobs:
           } catch {
               Write-Error "Failed to download the installer: $_"
               exit 1
-          }          
-          & msiexec.exe /i "$downloadPath" /qn /norestart
+          }
+          $msiArgs = "/i `"$downloadPath`" /qn /norestart"
+          $process = Start-Process msiexec.exe -ArgumentList $msiArgs -Wait -PassThru
+          if ($process.ExitCode -ne 0) {
+              Write-Error "Rancher Desktop installation failed with exit code $($process.ExitCode)."
+              exit 1
+          }
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
