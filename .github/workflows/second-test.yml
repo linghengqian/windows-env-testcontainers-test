@@ -52,7 +52,6 @@ jobs:
           choco install rancher-desktop
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
-          docker context ls
           & rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
           docker context ls
           docker run hello-world:linux
