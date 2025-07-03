@@ -217,7 +217,10 @@ jobs:
           }
       - name: Install Rancher Desktop without GUI
         run: |
-          winget install --id SUSE.RancherDesktop --source winget --verbose-logs
+          winget install --id SUSE.RancherDesktop --source winget
+          $logDir = "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir"
+          $latestLog = Get-ChildItem $logDir | Sort-Object LastWriteTime -Desc | Select-Object -First 1
+          Get-Content $latestLog.FullName | Write-Host -ForegroundColor Red
       - name: Setup Rancher Desktop without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
