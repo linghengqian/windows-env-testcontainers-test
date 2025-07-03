@@ -57,8 +57,7 @@ jobs:
           choco install rancher-desktop
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
-          Start-Process -FilePath "powershell"
-          rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
+          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
       - name: Wait for backend
         run: |
           $deadline = (Get-Date).AddMinutes(10)
