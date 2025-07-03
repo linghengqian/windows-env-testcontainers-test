@@ -225,7 +225,7 @@ jobs:
           Update-SessionEnvironment
       - name: Setup Rancher Desktop without GUI
         run: |
-          & rdctl.exe start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
+          rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
       - name: Wait for Rancher Desktop backend
         run: |
           $deadline = (Get-Date).AddMinutes(10)
