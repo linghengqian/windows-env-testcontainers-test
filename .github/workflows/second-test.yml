@@ -221,7 +221,7 @@ jobs:
           winget install --id SUSE.RancherDesktop --source winget --skip-dependencies
       - name: Setup Rancher Desktop without GUI
         run: |
-          rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
+          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
       - name: Wait for Rancher Desktop backend
         run: |
           $deadline = (Get-Date).AddMinutes(10)
@@ -274,8 +274,8 @@ jobs:
           exit 1
       - name: Test Docker CLI on Windows Server without GUI
         run: |
-          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\docker.exe" context ls
-          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\docker.exe" run hello-world:linux
+          docker context ls
+          docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
