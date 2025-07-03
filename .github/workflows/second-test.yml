@@ -21,13 +21,13 @@ jobs:
           distribution: 'Ubuntu-24.04'
           use-cache: 'true'
       # TODO need `Remove-DockerContainers`, `Remove-DockerImages`, `Remove-DockerVolumes`, `Remove-DockerNetworks`, `Remove-DockerData`
-      - name: Uninstall Docker Daemon on Windows Server
+      - name: Uninstall Docker Engine for WCOW on Windows Server
         run: |
-          $service = Get-Service -Name docker -ErrorAction SilentlyContinue
-          if ($service -ieq $null)
-          {
-              exit 0
-          }
+          $myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
+          $myWindowsPrincipal=new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
+          $adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
+          if (-not $myWindowsPrincipal.IsInRole($adminRole)) { throw "You must run this script as administrator" }
+          if (-not (Get-Service -Name docker -ErrorAction SilentlyContinue)) { exit 0 }
           Stop-Service -Name docker -Force -ErrorAction Stop
           & sc.exe delete docker 2>&1
           $registryPaths = @(
@@ -37,21 +37,12 @@ jobs:
           )
           foreach ($regPath in $registryPaths)
           {
-              if (Test-Path $regPath)
-              {
-                  Remove-Item $regPath -Recurse -Force
-              }
+              if (Test-Path $regPath) { Remove-Item $regPath -Recurse -Force }
           }
           $dockerExe = Join-Path $env:windir "System32\docker.exe"
-          if (Test-Path $dockerExe)
-          {
-              Remove-Item $dockerExe -Force
-          }
+          if (Test-Path $dockerExe) { Remove-Item $dockerExe -Force }
           $dockerdExe = Join-Path $env:windir "System32\dockerd.exe"
-          if (Test-Path $dockerdExe)
-          {
-              Remove-Item $dockerdExe -Force
-          }
+          if (Test-Path $dockerdExe) { Remove-Item $dockerdExe -Force }
       - name: Install Rancher Desktop on Windows Server without GUI
         run: |
           choco install rancher-desktop
