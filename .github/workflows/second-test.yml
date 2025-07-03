@@ -274,8 +274,8 @@ jobs:
           exit 1
       - name: Test Docker CLI on Windows Server without GUI
         run: |
-          docker context ls
-          docker run hello-world:linux
+          docker& "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\docker.exe" context ls
+          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\docker.exe" run hello-world:linux
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
