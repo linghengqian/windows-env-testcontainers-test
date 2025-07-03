@@ -20,7 +20,7 @@ jobs:
         with:
           distribution: 'Ubuntu-24.04'
           use-cache: 'true'
-      # TODO need `Remove-DockerContainers`, `Remove-DockerImages`, `Remove-DockerVolumes`, `Remove-DockerNetworks`, `Remove-DockerData`
+      # TODO need `Remove-DockerContainers`, `Remove-DockerImages`, `Remove-DockerVolumes`, `Remove-DockerNetworks`
       - name: Uninstall Docker Engine for WCOW on Windows Server
         run: |
           $myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
