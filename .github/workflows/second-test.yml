@@ -216,7 +216,9 @@ jobs:
               Remove-Item $dockerDownloads -Recurse -Force
           }
       - name: Install Rancher Desktop on Windows Server without GUI
-        run: choco install rancher-desktop
+        run: |
+          choco install rancher-desktop
+          Update-SessionEnvironment
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
