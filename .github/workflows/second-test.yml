@@ -158,20 +158,7 @@ jobs:
           $dockerDownloads = "$env:UserProfile\DockerDownloads"
           if (Test-Path $dockerDownloads) { Remove-Item $dockerDownloads -Recurse -Force }
       - name: Install Rancher Desktop on Windows Server without GUI
-        run: |
-          $downloadPath = Join-Path $env:TEMP "rancher-desktop.msi"
-          try {
-              Invoke-WebRequest -Uri "https://github.com/rancher-sandbox/rancher-desktop/releases/download/v1.19.3/Rancher.Desktop.Setup.1.19.3.msi" -OutFile $downloadPath
-          } catch {
-              Write-Error "Failed to download the installer: $_"
-              exit 1
-          }
-          $msiArgs = "/i `"$downloadPath`" /qn /norestart"
-          $process = Start-Process msiexec.exe -ArgumentList $msiArgs -Wait -PassThru
-          if ($process.ExitCode -ne 0) {
-              Write-Error "Rancher Desktop installation failed with exit code $($process.ExitCode)."
-              exit 1
-          }
+        run: choco install rancher-desktop
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
