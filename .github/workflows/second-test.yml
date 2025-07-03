@@ -23,6 +23,12 @@ jobs:
       # TODO need `Remove-DockerContainers`, `Remove-DockerImages`, `Remove-DockerVolumes`, `Remove-DockerNetworks`, `Remove-DockerData`
       - name: Uninstall Docker Engine on Windows Server
         run: |
+          $service = Get-Service -Name docker -ErrorAction SilentlyContinue
+          $testDocker = $service -ne $null
+          if (-not $testDocker)
+          {
+              exit 0
+          }
           Stop-Service -Name docker -Force -ErrorAction Stop
           & sc.exe delete docker 2>&1
           $registryPaths = @(
@@ -53,6 +59,58 @@ jobs:
       - name: Setup Rancher Desktop on Windows Server without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
+      - name: Wait for backend
+        run: |
+          $deadline = (Get-Date).AddMinutes(10)
+          $state = "UNKNOWN"
+          $rdctlPath = "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe"
+          while ((Get-Date) -lt $deadline) {
+            $now = Get-Date
+            $deadlineString = $deadline.ToString("u")
+            Write-Host "Waiting for backend: ($state) $now / $deadlineString"
+            $rdProcess = Get-Process -Name "Rancher Desktop" -ErrorAction SilentlyContinue | Sort-Object -Property StartTime | Select-Object -First 1
+            if (-not $rdProcess) {
+                $state = "NOT_RUNNING"
+                Start-Sleep -Seconds 10
+                continue
+            }
+            $rdEngineJsonPath = Join-Path $env:LOCALAPPDATA "rancher-desktop\rd-engine.json"
+            if (-not (Test-Path $rdEngineJsonPath)) {
+                $state = "NO_SERVER_CONFIG"
+                Start-Sleep -Seconds 10
+                continue
+            }
+            try {
+                $apiResponse = & $rdctlPath api /v1/backend_state | ConvertFrom-Json
+                $state = $apiResponse.vmState
+            } catch {
+                $state = "NO_RESPONSE"
+            }
+            switch ($state) {
+                "ERROR" {
+                    Write-Error "Backend reached error state."
+                    exit 1
+                }
+                "STARTED" {
+                    Write-Host "PID $($rdProcess.Id) has reached state $state, accepting"
+                    exit 0
+                }
+                "DISABLED" {
+                    Write-Host "PID $($rdProcess.Id) has reached state $state, accepting"
+                    exit 0
+                }
+                default {
+                    Write-Host "Backend state: $state"
+                }
+            }
+            Start-Sleep -Seconds 10
+          }
+          Write-Error "Timed out waiting for backend to stabilize."
+          Write-Error "Current time: $(Get-Date)"
+          Write-Error "Deadline: $($deadline.ToString("u"))"
+          exit 1
+      - name: Test Docker CLI on Windows Server without GUI
+        run: |
           docker context ls
           docker run hello-world:linux
       - uses: actions/setup-java@v4
