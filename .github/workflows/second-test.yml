@@ -217,8 +217,7 @@ jobs:
           }
       - name: Install Rancher Desktop without GUI
         run: |
-          winget install --id SUSE.RancherDesktop --source winget --silent --log "$env:TEMP\logRancher.txt"
-          cat "$env:TEMP\logRancher.txt"
+          winget install --id SUSE.RancherDesktop --source winget --silent --verbose 2>&1 | Out-String
       - name: Setup Rancher Desktop without GUI
         run: |
           & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
