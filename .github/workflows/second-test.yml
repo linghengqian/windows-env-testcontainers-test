@@ -263,7 +263,7 @@ jobs:
           }
           Write-Error "Timed out waiting for backend to stabilize."
           Write-Error "Current time: $(Get-Date)"
-          Write-Error "Deadline: $deadlineString"
+          Write-Error "Deadline: $($deadline.ToString("u"))"
           exit 1
       - name: Test Docker CLI on Windows Server without GUI
         run: |
