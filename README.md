@@ -1,6 +1,10 @@
 # windows-env-testcontainers-test
 
-- For https://github.com/apache/shardingsphere/issues/35052 .
+- For,
+  - https://github.com/apache/shardingsphere/issues/35052
+  - https://github.com/testcontainers/testcontainers-java/issues/10381
+  - https://github.com/rancher-sandbox/rancher-desktop/issues/8882
+  - https://github.com/rancher-sandbox/rancher-desktop/issues/8888
 - Execute the following command on the `Windows 11 Home 24H2` instance with `PowerShell/PowerShell`,
   `version-fox/vfox`, `git-for-windows/git` and `docker/cli` installed. 
   **Note that these commands are usually used in Github Actions' `windows-latest` runner or in a virtual machine that supports nested virtualization.**
