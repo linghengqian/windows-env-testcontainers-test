@@ -215,8 +215,6 @@ jobs:
           winget install --id jazzdelightsme.WingetPathUpdater --source winget
           winget install --id SUSE.RancherDesktop --source winget --skip-dependencies
           rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
-      - name: Test rdctl
-        run: rdctl --help
       - name: Wait for Rancher Desktop backend
         run: |
           $deadline = (Get-Date).AddMinutes(10)
