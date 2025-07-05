@@ -210,13 +210,12 @@ jobs:
           {
               Remove-Item $dockerDownloads -Recurse -Force
           }
-      - name: Install Rancher Desktop without GUI
-        run: |
-          winget install --id jazzdelightsme.WingetPathUpdater --source winget
-          winget install --id SUSE.RancherDesktop --source winget --skip-dependencies
       - name: Setup Rancher Desktop without GUI
+        # TODO See https://github.com/microsoft/winget-cli/issues/549 and https://blogs.windows.com/windows-insider/2024/02/14/announcing-windows-11-insider-preview-build-26058-canary-and-dev-channels/
+        shell: cmd
         run: |
-          & "C:\Program Files\Rancher Desktop\resources\resources\win32\bin\rdctl.exe" start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
+          winget install --id SUSE.RancherDesktop --source winget --skip-dependencies
+          rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
       - name: Wait for Rancher Desktop backend
         run: |
           $deadline = (Get-Date).AddMinutes(10)
