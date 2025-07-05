@@ -212,7 +212,6 @@ jobs:
           }
       - name: Install Rancher Desktop without GUI
         run: |
-          winget install --id jazzdelightsme.WingetPathUpdater --source winget
           winget install --id SUSE.RancherDesktop --source winget --skip-dependencies
           "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Setup Rancher Desktop without GUI
