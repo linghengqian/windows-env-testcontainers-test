@@ -243,17 +243,21 @@ jobs:
                 $state = "NO_RESPONSE"
             }
             switch ($state) {
-                "ERROR" {
-                    Write-Error "Backend reached error state."
-                    exit 1
-                }
-                "STARTED", "DISABLED" {
-                    Write-Host "PID $($rdProcess.Id) has reached state $state, accepting"
-                    exit 0
-                }
-                default {
-                    Write-Host "Backend state: $state"
-                }
+              "ERROR" {
+                Write-Error "Backend reached error state."
+                exit 1
+              }
+              "STARTED" {
+                Write-Host "PID $($rdProcess.Id) has reached state $state, accepting"
+                exit 0
+              }
+              "DISABLED" {
+                Write-Host "PID $($rdProcess.Id) has reached state $state, accepting"
+                exit 0
+              }
+              default {
+                Write-Host "Backend state: $state"
+              }
             }
             Start-Sleep -Seconds 10
           }
