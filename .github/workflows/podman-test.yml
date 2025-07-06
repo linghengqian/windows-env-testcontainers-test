@@ -14,14 +14,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Podman CLI For Windows
         run: |
-          $env:DOCKER_HOST
-          $env:TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE
           winget install --id jazzdelightsme.WingetPathUpdater --source winget
           winget install RedHat.Podman --source winget
           podman machine init
           podman machine set --rootful
           podman machine start
           "PATH=$env:PATH" >> $env:GITHUB_ENV
+          podman machine inspect --format '{{.ConnectionInfo.PodmanPipe.Path}}'
       - name: Test Docker CLI on Windows Server
         env:
           DOCKER_HOST: 'npipe:////./pipe/podman-machine-default'
