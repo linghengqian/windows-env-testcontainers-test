@@ -17,7 +17,6 @@ jobs:
           winget install --id jazzdelightsme.WingetPathUpdater --source winget
           winget install RedHat.Podman --source winget
           podman machine init
-          podman machine set --rootful
           podman machine start
           "DOCKER_HOST=npipe:////./pipe/podman-machine-default" >> $env:GITHUB_ENV
           "PATH=$env:PATH" >> $env:GITHUB_ENV
