@@ -20,7 +20,8 @@ jobs:
           podman machine set --rootful
           podman machine start
           $podmanPipeLocation = podman machine inspect --format '{{.ConnectionInfo.PodmanPipe.Path}}'
-          "DOCKER_HOST=npipe://$podmanPipeLocation" >> $env:GITHUB_ENV
+          $env:DOCKER_HOST = "npipe://$pipePath"
+          "DOCKER_HOST=$env:DOCKER_HOST" >> $env:GITHUB_ENV
           "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Test Docker CLI on Windows Server
         run: |
