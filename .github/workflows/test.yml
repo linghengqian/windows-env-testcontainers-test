@@ -49,5 +49,4 @@ jobs:
       - name: Run test with JDK
         env:
           DOCKER_HOST: tcp://127.0.0.1:12375
-          TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: '/var/run/docker.sock'
         run: ./mvnw clean test
