@@ -23,7 +23,7 @@ jobs:
       - name: Test Docker CLI on Windows Server
         run: |
           docker context ls
-          podman run hello-world:linux
+          podman run docker.io/library/hello-world:linux
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
