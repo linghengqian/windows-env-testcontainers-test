@@ -19,6 +19,7 @@ jobs:
           podman machine init
           podman machine set --rootful
           podman machine start
+          podman system service --time=0
           "DOCKER_HOST=npipe:////./pipe/podman-machine-default" >> $env:GITHUB_ENV
           "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Test Docker CLI on Windows Server
