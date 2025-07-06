@@ -21,9 +21,12 @@ jobs:
           podman machine start
           "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Test Docker CLI on Windows Server
+        env:
+          DOCKER_HOST: 'npipe:////./pipe/podman-machine-default'
         run: |
           docker context ls
           podman run docker.io/library/hello-world:linux
+          docker run hello-world:linux
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
