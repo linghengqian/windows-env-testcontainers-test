@@ -17,10 +17,9 @@ jobs:
           winget install --id jazzdelightsme.WingetPathUpdater --source winget
           winget install RedHat.Podman --source winget
           podman machine init
-          podman machine set --rootful
           podman machine start
-          podman machine ssh podman system service --time=0 &
           "DOCKER_HOST=npipe:////./pipe/podman-machine-default" >> $env:GITHUB_ENV
+          "TESTCONTAINERS_RYUK_DISABLED=true" >> $env:GITHUB_ENV
           "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Test Docker CLI on Windows Server
         run: |
