@@ -1,13 +1,9 @@
-name: Second Test CI
+name: Rancher Desktop Test CI
 
 on:
   push:
     branches: [ master ]
   workflow_dispatch:
-  
-concurrency:
-  group: second-test-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   test:
@@ -213,7 +209,7 @@ jobs:
       - name: Install Rancher Desktop without GUI
         run: |
           winget install --id jazzdelightsme.WingetPathUpdater --source winget
-          winget install --id SUSE.RancherDesktop --source winget --skip-dependencies
+          winget install --id SUSE.RancherDesktop --source winget
           "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Setup Rancher Desktop without GUI
         run: rdctl start --application.start-in-background --container-engine.name=moby --kubernetes.enabled=false
